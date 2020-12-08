@@ -1,0 +1,34 @@
+<component name="libraryTable">
+  <library name="src1">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/android/guava-testlib/src" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/android/guava-testlib/test" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/android/guava-tests/benchmark" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/android/guava-tests/test" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/android/guava/src" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/futures/failureaccess/src" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/futures/listenablefuture1/src" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/src" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/src-super/com/google/common/base/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/src-super/com/google/common/cache/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/src-super/com/google/common/collect/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/src-super/com/google/common/escape/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/src-super/com/google/common/primitives/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/src-super/com/google/common/util/concurrent/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/test" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/test-super/com/google/common/collect/testing/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/test-super/com/google/common/math/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/test-super/com/google/common/primitives/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/test-super/com/google/common/testing/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-gwt/test-super/com/google/common/util/concurrent/super" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-testlib/src" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-testlib/test" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-tests/benchmark" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava-tests/test" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/guava/src" />
+      <root url="file://$USER_HOME$/Downloads/30.0/google-guava-f75cd01/refactorings" />
+    </SOURCES>
+  </library>
+</component>
