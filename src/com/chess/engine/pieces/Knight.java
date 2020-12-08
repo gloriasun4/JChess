@@ -4,6 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
+import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +24,23 @@ public class Knight extends Piece{
         final List<Move> legalMoves = new ArrayList<>();
 
         for(final int currentCandidate : CANDIDATE_MOVE_COORDINATES) {
-
             candidateDestinationCoordinate = this.piecePosition + currentCandidate;
-
             if(true /* isValidTileCoordinate*/) {
                 final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
 
                 if(!candidateDestinationTile.isTileOccupied()) {
                     legalMoves.add(new Move());
                 }
+                else {
+                    final Piece pieceAtDestination = candidateDestinationTile.getPiece();
+                    final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
+                    if(this.pieceAlliance != pieceAlliance) {
+                        legalMoves.add(new Move());
+                    }
+                }
             }
-
         }
 
-
-        return null;
+        return ImmutableList.copyOf(legalMoves);
     }
 }
