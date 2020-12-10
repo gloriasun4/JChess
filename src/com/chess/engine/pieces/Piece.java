@@ -3,6 +3,8 @@ package com.chess.engine.pieces;
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
+
+import java.util.Collection;
 import java.util.List;
 
 public abstract class Piece {
@@ -17,8 +19,9 @@ public abstract class Piece {
     }
 
     public Alliance getPieceAlliance() {
-        return this.pieceAlliance();
+        return this.pieceAlliance;
     }
 
-    public abstract List<Move> calculateLegalMoves(final Board board);
+    //collection is superclass of list, like a sequence
+    public abstract Collection<Move> calculateLegalMoves(final Board board);
 }
