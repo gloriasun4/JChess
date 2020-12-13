@@ -8,22 +8,20 @@ import java.util.Map;
 
 public abstract class Tile {
 
-    //makes class immutable, final means that tileCoordinate can only be instantiated once
     protected final int tileCoordinate;
 
-    private static final Map<Integer, EmptyTile> EMPTY_TILESCACHE = createAllPossibleEmptyTiles();
+    private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
         for (int i = 0; i< BoardUtils.NUM_TILES; i++) {
             emptyTileMap.put(i, new EmptyTile(i));
         }
-        //map is container. after empty tile map is constructed, no one can change. from guava library from Google
         return ImmutableMap.copyOf(emptyTileMap);
     }
 
     public static Tile createTile(final int tileCoordinate, final Piece piece) {
-        return piece != null ? new OccupiedTile(tileCoordinate, piece) : EMPTY_TILESCACHE.get(tileCoordinate);
+        return piece != null ? new OccupiedTile(tileCoordinate, piece) : EMPTY_TILES_CACHE.get(tileCoordinate);
     }
     private Tile(final int tileCoordinate) {
         this.tileCoordinate = tileCoordinate;
