@@ -8,12 +8,14 @@ import java.util.Collection;
 
 public abstract class Piece {
 
+    protected final PieceType pieceType;
     protected final int piecePosition;
     //enum is a special class that represents a group of constants
     protected final Alliance pieceAlliance;
     protected final boolean isFirstMove;
 
-    Piece(final int piecePosition, final Alliance pieceAlliance) {
+    Piece(final PieceType pieceType, int piecePosition, final Alliance pieceAlliance) {
+        this.pieceType = pieceType;
         this.pieceAlliance = pieceAlliance;
         this.piecePosition = piecePosition;
         this.isFirstMove = false;
@@ -31,16 +33,50 @@ public abstract class Piece {
         return this.isFirstMove;
     }
 
+    public PieceType getPieceType() {
+        return this.pieceType;
+    }
+
     //collection is superclass of list, like a sequence
     public abstract Collection<Move> calculateLegalMoves(final Board board);
 
     public enum PieceType {
-        PAWN("P"),
-        KNIGHT("N"),
-        BISHOP("B"),
-        ROOK("R"),
-        QUEEN("Q"),
-        KING("K");
+        PAWN("P") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KNIGHT("N") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        BISHOP("B") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        ROOK("R") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        QUEEN("Q") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KING("K") {
+            @Override
+            public boolean isKing() {
+                return true;
+            }
+        };
 
         private final String pieceName;
 
@@ -48,10 +84,11 @@ public abstract class Piece {
             this.pieceName = pieceName;
         }
 
-
         @Override
         public String toString() {
             return this.pieceName;
         }
+
+        public abstract boolean isKing();
     }
 }
