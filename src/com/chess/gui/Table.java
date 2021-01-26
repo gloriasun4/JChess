@@ -42,8 +42,8 @@ public class Table {
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600,600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400,350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10,10);
-    //private static String defaultPieceImagesPath = "C:/Users/glori/IdeaProjects/JChess/src/art/simple/";
-    private static String defaultPieceImagesPath = "C:/Users/krazy/IdeaProjects/JChess/src/art/simple/";
+    private static String defaultPieceImagesPath = "C:/Users/glori/IdeaProjects/JChess/src/art/simple/";
+    //private static String defaultPieceImagesPath = "C:/Users/krazy/IdeaProjects/JChess/src/art/simple/";
 
     private final Color lightTileColor = Color.decode("#dadada");
     private final Color darkTileColor = Color.decode("#adadad");
@@ -184,6 +184,39 @@ public class Table {
         }
     }
 
+    public static class MoveLog {
+
+        private final List<Move> moves;
+
+        MoveLog() {
+            this.moves = new ArrayList<>();
+        }
+
+        public List<Move> getMoves() {
+            return this.moves;
+        }
+
+        public void addMove(final Move move) {
+            this.moves.add(move);
+        }
+
+        public int size() {
+            return this.moves.size();
+        }
+
+        public void clear() {
+            this.moves.clear();
+        }
+
+        public Move removeMove(final int index) {
+            return this.moves.remove(index);
+        }
+
+        public boolean removeMove(final Move move) {
+            return this.moves.remove(move);
+        }
+    }
+
     private class TilePanel extends JPanel {
         private final int tileId;
 
@@ -193,6 +226,7 @@ public class Table {
             setPreferredSize(TILE_PANEL_DIMENSION);
             assignTileColor();
             assignTilePieceIcon(chessBoard);
+            //highlightLegals(chessBoard);
 
             addMouseListener(new MouseListener() {
                 @Override
@@ -258,6 +292,7 @@ public class Table {
         public void drawTile(final Board board) {
             assignTileColor();
             assignTilePieceIcon(board);
+            highlightLegals(board);
             validate();
             repaint();
         }
@@ -283,7 +318,7 @@ public class Table {
                     if (move.getDestinationCoordinate() == this.tileId) {
                         try {
                             add(new JLabel(new ImageIcon(ImageIO.read(new File
-                                    ("C:/Users/krazy/IdeaProjects/JChess/src/art/misc/green_dot.png")))));
+                                    ("C:/Users/glori/IdeaProjects/JChess/src/art/misc/green_dot.png")))));
                         } catch(Exception e) {
                             e.printStackTrace();
                         }
