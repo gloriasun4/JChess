@@ -209,6 +209,11 @@ public abstract class Move {
             builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
             return builder.build();
         }
+
+        @Override
+        public String toString() {
+            return BoardUtils.getPositionAtCoordinate(destinationCoordinate);
+        }
     }
 
     static abstract class CastleMove extends Move {
@@ -281,7 +286,7 @@ public abstract class Move {
         public static final class NullMove extends Move {
 
             public NullMove() {
-                super(null, null, -1);
+                super(null, -1);
             }
 
             @Override

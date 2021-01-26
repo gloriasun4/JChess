@@ -29,7 +29,11 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 public class Table {
 
     private final JFrame gameFrame;
+    private final GameHistoryPanel gameHistoryPanel;
+    private final TakenPiecesPanel takenPiecesPanel;
     private final BoardPanel boardPanel;
+    private final MoveLog moveLog;
+
     private Board chessBoard;
 
     private Tile sourceTile;
@@ -43,7 +47,6 @@ public class Table {
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400,350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10,10);
     private static String defaultPieceImagesPath = "C:/Users/glori/IdeaProjects/JChess/src/art/simple/";
-    //private static String defaultPieceImagesPath = "C:/Users/krazy/IdeaProjects/JChess/src/art/simple/";
 
     private final Color lightTileColor = Color.decode("#dadada");
     private final Color darkTileColor = Color.decode("#adadad");
@@ -56,11 +59,19 @@ public class Table {
         final JMenuBar tableMenuBar = createTableMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
+
+        this.gameHistoryPanel = new GameHistoryPanel();
+        this.takenPiecesPanel = new TakenPiecesPanel();
+
         this.chessBoard = Board.createStandardBoard();
         this.boardPanel = new BoardPanel();
+        this.moveLog = new MoveLog();
         this.boardDirection = BoardDirection.NORMAL;
         this.highlightLegalMoves = false;
+
+        this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
+        this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
 
         this.gameFrame.setVisible(true);
     }
@@ -250,6 +261,7 @@ public class Table {
                             final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
                             if (transition.getMoveStatus().isDone()) {
                                 chessBoard = transition.getTransitionBoard();
+                                moveLog.addMove(move);
                             }
                             sourceTile = null;
                             destinationTile = null;
@@ -258,6 +270,8 @@ public class Table {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
+                                gameHistoryPanel.redo(chessBoard,moveLog);
+                                takenPiecesPanel.redo(moveLog);
                                 boardPanel.drawBoard(chessBoard);
                             }
                         });
