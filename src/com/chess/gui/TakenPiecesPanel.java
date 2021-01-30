@@ -80,7 +80,7 @@ public class TakenPiecesPanel extends JPanel {
 
         for (final Piece takenPiece : whiteTakenPieces) {
             try {
-                final BufferedImage image = ImageIO.read(new File("art/simple" +
+                final BufferedImage image = ImageIO.read(new File("C:/Users/glori/IdeaProjects/JChess/src/art/simple/" +
                         takenPiece.getPieceAlliance().toString().charAt(0) + "" + takenPiece.toString()));
                 final ImageIcon icon = new ImageIcon(image);
                 final JLabel imageLabel = new JLabel();
@@ -92,7 +92,7 @@ public class TakenPiecesPanel extends JPanel {
 
         for (final Piece takenPiece : blackTakenPieces) {
             try {
-                final BufferedImage image = ImageIO.read(new File("art/simple" +
+                final BufferedImage image = ImageIO.read(new File("C:/Users/glori/IdeaProjects/JChess/src/art/simple/" +
                         takenPiece.getPieceAlliance().toString().charAt(0) + "" + takenPiece.toString()));
                 final ImageIcon icon = new ImageIcon(image);
                 final JLabel imageLabel = new JLabel();
