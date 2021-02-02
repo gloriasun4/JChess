@@ -4,6 +4,8 @@ import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 import com.chess.engine.player.MoveTransition;
 
+import java.sql.SQLOutput;
+
 public class MiniMax implements MoveStrategy{
 
     private final BoardEvaluator boardEvaluator;
@@ -19,7 +21,38 @@ public class MiniMax implements MoveStrategy{
 
     @Override
     public Move execute(Board board, int depth) {
-        return null;
+
+        final long startTime = System.currentTimeMillis();
+
+        Move bestMove = null;
+
+        int highestSeenValue = Integer.MIN_VALUE;
+        int lowestSeenValue = Integer.MAX_VALUE;
+        int currentValue;
+
+        System.out.println(board.currentPlayer() + "THINKING with depth = " + depth);
+
+        int numMoves = board.currentPlayer().getLegalMoves().size();
+        for(final Move move : board.currentPlayer().getLegalMoves()) {
+
+            final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
+            if(moveTransition.getMoveStatus().isDone()) {
+                currentValue = board.currentPlayer().getAlliance().isWhite() ?
+                        min(moveTransition.getTransitionBoard(), depth-1) :
+                        max(moveTransition.getTransitionBoard(), depth-1);
+
+                if(board.currentPlayer().getAlliance().isWhite() && currentValue >= highestSeenValue) {
+                    highestSeenValue = currentValue;
+                    bestMove = move;
+                } else if(board.currentPlayer().getAlliance().isBlack() && currentValue <= lowestSeenValue) {
+                    lowestSeenValue = currentValue;
+                    bestMove = move;
+                }
+            }
+        }
+        final long executionTime = System.currentTimeMillis()-startTime;
+
+        return bestMove;
     }
 
     public int min(final Board board, final int depth) {
