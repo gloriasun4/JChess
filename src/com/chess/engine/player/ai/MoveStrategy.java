@@ -5,5 +5,5 @@ import com.chess.engine.board.Move;
 
 //what is an interface?
 public interface MoveStrategy {
-    Move execute(Board board, int depth);
+    Move execute(Board board);
 }
