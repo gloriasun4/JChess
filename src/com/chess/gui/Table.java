@@ -228,6 +228,11 @@ public class Table {
         }
     }
 
+    enum PlayerType {
+        HUMAN,
+        COMPUTER
+    }
+
     private class TilePanel extends JPanel {
         private final int tileId;
 
