@@ -18,21 +18,20 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
-public class Table {
+public class Table extends Observable {
 
     private final JFrame gameFrame;
     private final GameHistoryPanel gameHistoryPanel;
     private final TakenPiecesPanel takenPiecesPanel;
     private final BoardPanel boardPanel;
     private final MoveLog moveLog;
+    private final GameSetup gameSetup;
 
     private Board chessBoard;
 
@@ -51,7 +50,9 @@ public class Table {
     private final Color lightTileColor = Color.decode("#dadada");
     private final Color darkTileColor = Color.decode("#adadad");
 
-    public Table() {
+    private final static Table INSTANCE = new Table();
+
+    private Table() {
         this.gameFrame = new JFrame("JChess");
         this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -66,6 +67,7 @@ public class Table {
         this.chessBoard = Board.createStandardBoard();
         this.boardPanel = new BoardPanel();
         this.moveLog = new MoveLog();
+        this.gameSetup = new GameSetup(this.gameFrame, true);
         this.boardDirection = BoardDirection.NORMAL;
         this.highlightLegalMoves = false;
 
@@ -74,6 +76,18 @@ public class Table {
         this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
 
         this.gameFrame.setVisible(true);
+    }
+
+    public static Table get() {
+        return INSTANCE;
+    }
+
+    private GameSetup getGameSetup() {
+        return this.gameSetup;
+    }
+
+    private Board getGameBoard() {
+        return this.chessBoard;
     }
 
     private JMenuBar createTableMenuBar() {
@@ -138,6 +152,43 @@ public class Table {
         preferencesMenu.add(legalMovesHighlighterCheckBox);
 
         return preferencesMenu;
+    }
+
+    private JMenu createOptionsMenu() {
+        final JMenu optionsMenu = new JMenu("Options");
+
+        final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
+        setupGameMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Table.get().getGameSetup().promptUser();
+                Table.get().setupUpdate(Table.get().getGameSetup());
+            }
+        });
+
+        optionsMenu.add(setupGameMenuItem);
+        return optionsMenu;
+    }
+
+    //research observer pattern
+    private void setupUpdate(final GameSetup gameSetup) {
+        setChanged();
+        notifyObservers(gameSetup);
+    }
+
+    private static class TableGameAIWatcher implements Observer {
+
+        @Override
+        public void update(Observable o, final Object arg) {
+            if(Table.get().getGameSetup().isAIPlayer(Table.get().getGameBoard().currentPlayer()) &&
+                    !Table.get().getGameBoard().currentPlayer().isInCheckMate() &&
+                    !Table.get().getGameBoard().currentPlayer().isInStaleMate()) {
+
+                final AIThinkTank thinkTank = new AIThinkTank();
+                thinkTank.execute();
+
+            }
+        }
     }
 
     public enum BoardDirection {
