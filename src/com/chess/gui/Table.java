@@ -6,6 +6,8 @@ import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Piece;
 import com.chess.engine.player.MoveTransition;
+import com.chess.engine.player.ai.MiniMax;
+import com.chess.engine.player.ai.MoveStrategy;
 import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
@@ -20,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
@@ -187,6 +190,55 @@ public class Table extends Observable {
                 final AIThinkTank thinkTank = new AIThinkTank();
                 thinkTank.execute();
 
+            }
+
+            if(Table.get().getGameBoard().currentPlayer().isInCheckMate()) {
+                System.out.println("Game over, " +
+                        Table.get().getGameBoard().currentPlayer() + " is in checkmate!");
+            }
+
+            if(Table.get().getGameBoard().currentPlayer().isInStaleMate()) {
+                System.out.println("Game over, " +
+                        Table.get().getGameBoard().currentPlayer() + " is in stalemate!");
+            }
+        }
+    }
+
+    //research SwingWorker
+    private static class AIThinkTank extends SwingWorker<Move, String> {
+
+        private AIThinkTank() {
+
+        }
+
+        @Override
+        protected Move doInBackground() throws Exception {
+
+            final MoveStrategy miniMax = new MiniMax(4);
+
+            final Move bestMove = miniMax.execute(Table.get().getGameBoard());
+
+            return bestMove;
+        }
+
+        @Override
+        public void done() {
+
+            try {
+                final Move bestMove = get();
+
+                Table.get().updateComputerMove(bestMove);
+                Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(bestMove).getTransitionBoard());
+                Table.get().getMoveLog().addMove(bestMove);
+                Table.get().getGameHistoryPanel().redo();
+                Table.get().getTakenPiecesPanel().redo();
+                Table.get().getBoardPanel().drawBoard();
+                Table.get().moveMadeUpdate(PlayerType.COMPUTER);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
         }
     }
