@@ -42,6 +42,7 @@ public class Table extends Observable {
     private Tile destinationTile;
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
+    private Move computerMove;
 
     private boolean highlightLegalMoves;
 
@@ -70,6 +71,7 @@ public class Table extends Observable {
         this.chessBoard = Board.createStandardBoard();
         this.boardPanel = new BoardPanel();
         this.moveLog = new MoveLog();
+        this.addObserver(new TableGameAIWatcher());
         this.gameSetup = new GameSetup(this.gameFrame, true);
         this.boardDirection = BoardDirection.NORMAL;
         this.highlightLegalMoves = false;
@@ -85,6 +87,14 @@ public class Table extends Observable {
         return INSTANCE;
     }
 
+    public void show() {
+        Table.get().getMoveLog().clear();
+        Table.get().getGameHistoryPanel().redo(chessBoard, Table.get().getMoveLog());
+        Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
+        Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
+        //Table.get().getDebugPanel().redo();
+    }
+
     private GameSetup getGameSetup() {
         return this.gameSetup;
     }
@@ -97,6 +107,7 @@ public class Table extends Observable {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createFileMenu());
         tableMenuBar.add(createPreferencesMenu());
+        tableMenuBar.add(createOptionsMenu());
         return tableMenuBar;
     }
 
@@ -204,6 +215,35 @@ public class Table extends Observable {
         }
     }
 
+    public void updateGameBoard(final Board board) {
+        this.chessBoard = board;
+    }
+
+    public void updateComputerMove(final Move move) {
+        this.computerMove = move;
+    }
+
+    private MoveLog getMoveLog() {
+        return this.moveLog;
+    }
+
+    private GameHistoryPanel getGameHistoryPanel() {
+        return this.gameHistoryPanel;
+    }
+
+    private TakenPiecesPanel getTakenPiecesPanel() {
+        return this.takenPiecesPanel;
+    }
+
+    private BoardPanel getBoardPanel() {
+        return this.boardPanel;
+    }
+
+    private void moveMadeUpdate(final PlayerType playerType) {
+        setChanged();
+        notifyObservers(playerType);
+    }
+
     //research SwingWorker
     private static class AIThinkTank extends SwingWorker<Move, String> {
 
@@ -230,9 +270,9 @@ public class Table extends Observable {
                 Table.get().updateComputerMove(bestMove);
                 Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(bestMove).getTransitionBoard());
                 Table.get().getMoveLog().addMove(bestMove);
-                Table.get().getGameHistoryPanel().redo();
-                Table.get().getTakenPiecesPanel().redo();
-                Table.get().getBoardPanel().drawBoard();
+                Table.get().getGameHistoryPanel().redo(Table.get().getGameBoard(), Table.get().getMoveLog());
+                Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
+                Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
                 Table.get().moveMadeUpdate(PlayerType.COMPUTER);
 
             } catch (InterruptedException e) {
@@ -375,13 +415,14 @@ public class Table extends Observable {
                             destinationTile = null;
                             humanMovedPiece = null;
                         }
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
+                        SwingUtilities.invokeLater(() -> {
                                 gameHistoryPanel.redo(chessBoard,moveLog);
                                 takenPiecesPanel.redo(moveLog);
+
+                                if(gameSetup.isAIPlayer(chessBoard.currentPlayer())) {
+                                    Table.get().moveMadeUpdate(PlayerType.HUMAN);
+                                }
                                 boardPanel.drawBoard(chessBoard);
-                            }
                         });
                     }
                 }

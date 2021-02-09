@@ -1,5 +1,7 @@
 package com.chess.gui;
 
+import com.chess.engine.Alliance;
+import com.chess.engine.player.Player;
 import com.chess.gui.Table.PlayerType;
 import javax.swing.*;
 import java.awt.*;
@@ -77,5 +79,37 @@ public class GameSetup extends JDialog {
         //why does visibility need to be set to false
         setVisible(false);
     }
+    void promptUser() {
+        setVisible(true);
+        repaint();
+    }
 
+    boolean isAIPlayer(final Player player) {
+        if(player.getAlliance() == Alliance.WHITE) {
+            return getWhitePlayerType() == PlayerType.COMPUTER;
+        }
+        return getBlackPlayerType() == PlayerType.COMPUTER;
+    }
+    PlayerType getWhitePlayerType() {
+        return this.whitePlayerType;
+    }
+
+    PlayerType getBlackPlayerType() {
+        return this.blackPlayerType;
+    }
+
+    private static JSpinner addLabeledSpinner(final Container c,
+                                              final String label,
+                                              final SpinnerModel model) {
+        final JLabel l = new JLabel(label);
+        c.add(l);
+        final JSpinner spinner = new JSpinner(model);
+        l.setLabelFor(spinner);
+        c.add(spinner);
+        return spinner;
+    }
+
+    int getSearchDepth() {
+        return (Integer)this.searchDepthSpinner.getValue();
+    }
 }
