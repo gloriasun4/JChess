@@ -27,14 +27,26 @@ public class FenUtilities {
 
     private static String calculateBoardText(final Board board) {
         final StringBuilder builder = new StringBuilder();
-        int count = 0;
         for(int i = 0; i < BoardUtils.NUM_TILES; i++) {
-            if (i%8 == 0) {
-                builder.append("/");
-            }
+            String tileText = board.getTile(i).toString();
+            builder.append(tileText);
         }
-        String result = builder.toString();
-        return result;
+        builder.insert(8, "/");
+        builder.insert(17, "/");
+        builder.insert(26, "/");
+        builder.insert(35, "/");
+        builder.insert(44, "/");
+        builder.insert(53, "/");
+        builder.insert(62, "/");
+
+        return builder.toString().replaceAll("--------", "8")
+                .replaceAll("-------", "7")
+                .replaceAll("------", "6")
+                .replaceAll("-----", "5")
+                .replaceAll("----", "4")
+                .replaceAll("---", "3")
+                .replaceAll("--", "2")
+                .replaceAll("-", "1");
     }
 
     private static String calculateEnPassantSquare(final Board board) {
